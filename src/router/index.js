@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/PageHome.vue";
 import ThreadShow from "@/views/PageThreadShow.vue";
+import Category from "@/views/PageCategory.vue";
 import Forum from "@/views/PageForum.vue";
 import NotFound from "@/views/PageNotFound.vue";
 
@@ -17,6 +18,12 @@ const routes = [
     path: "/thread/:id",
     name: "ThreadShow",
     component: ThreadShow,
+    props: true,
+  },
+  {
+    path: "/category/:id",
+    name: "Category",
+    component: Category,
     props: true,
   },
   {
