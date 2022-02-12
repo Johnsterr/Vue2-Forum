@@ -4,6 +4,7 @@ import Home from "@/views/PageHome.vue";
 import ThreadShow from "@/views/PageThreadShow.vue";
 import Category from "@/views/PageCategory.vue";
 import Forum from "@/views/PageForum.vue";
+import Profile from "@/views/PageProfile.vue";
 import NotFound from "@/views/PageNotFound.vue";
 
 Vue.use(VueRouter);
@@ -30,6 +31,12 @@ const routes = [
     path: "/forum/:id",
     name: "Forum",
     component: Forum,
+    props: true,
+  },
+  {
+    path: "/me",
+    name: "Profile",
+    component: Profile,
     props: true,
   },
   {
