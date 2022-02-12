@@ -39,11 +39,10 @@
 
         <li class="navbar-user">
           <a href="#">
-            <img class="avatar-small" src="http://avatarmaker.ru/img/11/1035/103447.gif"
-                 alt="">
+            <img class="avatar-small" :src="user.avatar" alt="" />
             <span>
-                Alex Kyriakidis
-                <img class="icon-profile" src="../assets/img/arrow-profile.svg" alt="">
+                {{ user.name }}
+                <img class="icon-profile" src="../assets/img/arrow-profile.svg" alt="" />
             </span>
           </a>
 
@@ -63,5 +62,13 @@
 </template>
 
 <script>
-export default {};
+import { mapGetters } from "vuex";
+
+export default {
+  computed: {
+    ...mapGetters({
+      "user": "authUser",
+    }),
+  },
+};
 </script>
