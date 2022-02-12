@@ -6,7 +6,9 @@
           <h1>{{ forum.name }}</h1>
           <p class="text-lead">{{ forum.description }}</p>
         </div>
-        <a href="new-thread.html" class="btn-green btn-small">Start a thread</a>
+        <router-link :to="{name: 'ThreadCreate', params: {forum: this.forum}}" class="btn-green btn-small">
+          Start a thread
+        </router-link>
       </div>
     </div>
 
@@ -34,8 +36,7 @@ export default {
       return this.$store.state.forums[this.id];
     },
     threads() {
-      return Object.values(this.$store.state.threads)
-      .filter(thread => thread.forumId === this.id);
+      return Object.values(this.$store.state.threads).filter(thread => thread.forumId === this.id);
     },
   },
 };

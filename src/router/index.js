@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/PageHome.vue";
 import ThreadShow from "@/views/PageThreadShow.vue";
+import ThreadCreate from "@/views/PageThreadCreate.vue";
 import Category from "@/views/PageCategory.vue";
 import Forum from "@/views/PageForum.vue";
 import Profile from "@/views/PageProfile.vue";
@@ -19,6 +20,12 @@ const routes = [
     path: "/thread/:id",
     name: "ThreadShow",
     component: ThreadShow,
+    props: true,
+  },
+  {
+    path: "/thread/create",
+    name: "ThreadCreate",
+    component: ThreadCreate,
     props: true,
   },
   {
@@ -43,7 +50,7 @@ const routes = [
     path: "/me/edit",
     name: "ProfileEdit",
     component: Profile,
-    props: { edit: true },
+    props: {edit: true},
   },
   {
     path: "*",
