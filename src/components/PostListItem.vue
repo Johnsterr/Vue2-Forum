@@ -24,7 +24,7 @@
         </a>
       </template>
       <div v-else>
-        <PostEditor :post="post" @save="editing = false" />
+        <PostEditor :post="post" @save="editing = false" @cancel="editing = false" />
       </div>
     </div>
 
