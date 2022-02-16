@@ -1,5 +1,5 @@
 <template>
-  <div class="col-large push-top">
+  <div v-if="thread && user" class="col-large push-top">
     <h1>
       {{ thread.title }}
       <router-link :to="{name: 'ThreadEdit', id: this.id}" custom v-slot="{navigate, button}">
@@ -18,8 +18,11 @@
 </template>
 
 <script>
+import {ref, onValue} from "firebase/database";
+import {firebaseDatabase} from "@/main.js";
 import PostList from "@/components/PostList.vue";
 import PostEditor from "@/components/PostEditor.vue";
+import {countObjectProperties} from "@/utils";
 
 export default {
   components: {
@@ -43,19 +46,59 @@ export default {
       return this.$store.state.users[this.thread.userId];
     },
     contributorsCount() {
-      // Find the replies
-      const replies = Object.keys(this.thread.posts)
-        .filter(postId => postId !== this.thread.firstPostId)
-        .map(postId => this.$store.state.posts[postId]);
-      // Get the user IDs
-      const userIds = replies.map(post => post.userId);
-      // Count the unique IDs
-      return userIds.filter((item, index) => index === userIds.indexOf(item)).length;
+      return countObjectProperties(this.thread.contributors);
     },
     posts() {
       const postIds = Object.values(this.thread.posts);
       return Object.values(this.$store.state.posts).filter(post => postIds.includes(post[".key"]));
     },
+  },
+  created() {
+    onValue(
+      ref(firebaseDatabase, `threads/${this.id}`),
+      snapshot => {
+        const thread = snapshot.val();
+        this.$store.commit("setThread", {threadId: snapshot.key, thread: {...thread, ".key": snapshot.key}});
+
+        // Fetch user
+        onValue(
+          ref(firebaseDatabase, `users/${thread.userId}`),
+          snapshot => {
+            const user = snapshot.val();
+            this.$store.commit("setUser", {userId: snapshot.key, user: {...user, ".key": snapshot.key}});
+          },
+          {
+            onlyOnce: true,
+          }
+        );
+
+        Object.keys(thread.posts).forEach(postId => {
+          onValue(
+            ref(firebaseDatabase, `posts/${postId}`),
+            snapshot => {
+              const post = snapshot.val();
+              this.$store.commit("setPost", {postId: snapshot.key, post: {...post, ".key": snapshot.key}});
+
+              // Fetch user
+              onValue(
+                ref(firebaseDatabase, `users/${post.userId}`),
+                snapshot => {
+                  const user = snapshot.val();
+                  this.$store.commit("setUser", {userId: snapshot.key, user: {...user, ".key": snapshot.key}});
+                },
+                {
+                  onlyOnce: true,
+                }
+              );
+            },
+            {onlyOnce: true}
+          );
+        });
+      },
+      {
+        onlyOnce: true,
+      }
+    );
   },
 };
 </script>

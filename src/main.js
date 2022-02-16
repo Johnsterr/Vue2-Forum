@@ -17,9 +17,9 @@ const firebaseConfig = {
   appId: process.env.VUE_APP_APP_ID,
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
-const firebaseDatabase = getDatabase(firebaseApp);
-const firebaseAuth = getAuth(firebaseApp);
+export const firebaseApp = initializeApp(firebaseConfig);
+export const firebaseDatabase = getDatabase(firebaseApp);
+export const firebaseAuth = getAuth(firebaseApp);
 
 Vue.component("AppDate", AppDate);
 
