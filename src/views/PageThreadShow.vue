@@ -16,13 +16,10 @@
     <PostEditor :threadId="id" />
   </div>
 </template>
-
 <script>
-import {ref, onValue} from "firebase/database";
-import {firebaseDatabase} from "@/main.js";
 import PostList from "@/components/PostList.vue";
 import PostEditor from "@/components/PostEditor.vue";
-import {countObjectProperties} from "@/utils";
+import { countObjectProperties } from "@/utils";
 
 export default {
   components: {
@@ -54,51 +51,18 @@ export default {
     },
   },
   created() {
-    onValue(
-      ref(firebaseDatabase, `threads/${this.id}`),
-      snapshot => {
-        const thread = snapshot.val();
-        this.$store.commit("setThread", {threadId: snapshot.key, thread: {...thread, ".key": snapshot.key}});
-
-        // Fetch user
-        onValue(
-          ref(firebaseDatabase, `users/${thread.userId}`),
-          snapshot => {
-            const user = snapshot.val();
-            this.$store.commit("setUser", {userId: snapshot.key, user: {...user, ".key": snapshot.key}});
-          },
-          {
-            onlyOnce: true,
-          }
-        );
-
-        Object.keys(thread.posts).forEach(postId => {
-          onValue(
-            ref(firebaseDatabase, `posts/${postId}`),
-            snapshot => {
-              const post = snapshot.val();
-              this.$store.commit("setPost", {postId: snapshot.key, post: {...post, ".key": snapshot.key}});
-
-              // Fetch user
-              onValue(
-                ref(firebaseDatabase, `users/${post.userId}`),
-                snapshot => {
-                  const user = snapshot.val();
-                  this.$store.commit("setUser", {userId: snapshot.key, user: {...user, ".key": snapshot.key}});
-                },
-                {
-                  onlyOnce: true,
-                }
-              );
-            },
-            {onlyOnce: true}
-          );
+    this.$store.dispatch("fetchThread", { id: this.id }).then(thread => {
+      // fetch user
+      this.$store.dispatch("fetchUser", { id: thread.userId });
+      
+      Object.keys(thread.posts).forEach(postId => {
+        // fetch post
+        this.$store.dispatch("fetchPost", { id: postId }).then(post => {
+          // fetch user
+          this.$store.dispatch("fetchUser", { id: post.userId });
         });
-      },
-      {
-        onlyOnce: true,
-      }
-    );
+      });
+    });
   },
 };
 </script>
