@@ -110,8 +110,8 @@ export default new Vuex.Store({
       return dispatch("fetchItem", { resource: "users", id, emoji: "🙋" });
     },
 
-    fetchPost({ dispatch }, { id }) {
-      return dispatch("fetchItem", { resource: "posts", id, emoji: "💬" });
+    fetchPosts({ dispatch }, { ids }) {
+      return dispatch("fetchItems", { resource: "posts", emoji: "💬", ids });
     },
 
     fetchItem({ state, commit }, { id, emoji, resource }) {
@@ -126,6 +126,10 @@ export default new Vuex.Store({
           { onlyOnce: true },
         );
       });
+    },
+
+    fetchItems({ dispatch }, { ids, resource, emoji }) {
+      return Promise.all(ids.map(id => dispatch("fetchItem", { id, resource, emoji })));
     },
   },
 

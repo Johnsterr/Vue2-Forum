@@ -7,7 +7,9 @@
       </router-link>
     </h1>
     <p>
-      By <a href="#" class="link-unstyled">{{ user.name }}</a>, <AppDate :timestamp="thread.publishedAt" />.
+      By <a href="#" class="link-unstyled">{{ user.name }}</a>,
+      <AppDate :timestamp="thread.publishedAt" />
+      .
       <span style="float: right; margin-top: 2px" class="hide-mobile text-faded text-small">
         {{ repliesCount }} replies by {{ contributorsCount }} contributors
       </span>
@@ -55,10 +57,9 @@ export default {
       // fetch user
       this.$store.dispatch("fetchUser", { id: thread.userId });
       
-      Object.keys(thread.posts).forEach(postId => {
-        // fetch post
-        this.$store.dispatch("fetchPost", { id: postId }).then(post => {
-          // fetch user
+      this.$store.dispatch("fetchPosts", { ids: Object.keys(thread.posts) })
+      .then(posts => {
+        posts.forEach(post => {
           this.$store.dispatch("fetchUser", { id: post.userId });
         });
       });
