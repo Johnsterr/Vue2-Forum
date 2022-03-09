@@ -1,5 +1,5 @@
 <template>
-  <div class="forum-wrapper">
+  <div v-if="forum" class="forum-wrapper">
     <div class="col-full push-top">
       <div class="forum-header">
         <div class="forum-details">
@@ -11,13 +11,11 @@
         </router-link>
       </div>
     </div>
-
     <div class="col-full push-top">
       <ThreadList :threads="threads" />
     </div>
   </div>
 </template>
-
 <script>
 import ThreadList from "@/components/ThreadList.vue";
 
@@ -39,9 +37,17 @@ export default {
       return Object.values(this.$store.state.threads).filter(thread => thread.forumId === this.id);
     },
   },
+  created() {
+    this.$store.dispatch("fetchForum", { id: this.id })
+    .then(forum => {
+      this.$store.dispatch("fetchThreads", { ids: forum.threads })
+      .then(threads => {
+        threads.forEach(thread => this.$store.dispatch("fetchUser", { id: thread.userId }));
+      });
+    });
+  },
 };
 </script>
-
 <style scoped>
 .forum-wrapper {
   width: 100%;
