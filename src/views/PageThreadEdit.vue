@@ -7,6 +7,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from "vuex";
 import ThreadEditor from "@/components/ThreadEditor.vue";
 
 export default {
@@ -29,14 +30,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["updateThread", "fetchThread", "fetchPost"]),
     save({ title, text }) {
-      this.$store
-      .dispatch("updateThread", {
-        id: this.id,
-        title,
-        text,
-      })
-      .then(thread => {
+      this.updateThread({ id: this.id, title, text }).then(thread => {
         this.$router.push({ name: "ThreadShow", params: { id: this.id } });
       });
     },
@@ -45,8 +41,7 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch("fetchThread", { id: this.id })
-    .then(thread => this.$store.dispatch("fetchPost", { id: thread.firstPostId }));
+    this.fetchThread({ id: this.id }).then(thread => this.fetchPost({ id: thread.firstPostId }));
   },
 };
 </script>

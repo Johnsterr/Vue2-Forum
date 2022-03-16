@@ -17,6 +17,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from "vuex";
 import PostList from "@/components/PostList.vue";
 import PostEditor from "@/components/PostEditor.vue";
 import { countObjectProperties } from "@/utils";
@@ -50,15 +51,16 @@ export default {
       return Object.values(this.$store.state.posts).filter(post => postIds.includes(post[".key"]));
     },
   },
+  methods: {
+    ...mapActions(["fetchThread", "fetchUser", "fetchPosts"]),
+  },
   created() {
-    this.$store.dispatch("fetchThread", { id: this.id }).then(thread => {
+    this.fetchThread({ id: this.id }).then(thread => {
       // fetch user
-      this.$store.dispatch("fetchUser", { id: thread.userId });
-      
-      this.$store.dispatch("fetchPosts", { ids: Object.keys(thread.posts) })
-      .then(posts => {
+      this.fetchUser({ id: thread.userId });
+      this.fetchPosts({ ids: Object.keys(thread.posts) }).then(posts => {
         posts.forEach(post => {
-          this.$store.dispatch("fetchUser", { id: post.userId });
+          this.fetchUser({ id: post.userId });
         });
       });
     });
