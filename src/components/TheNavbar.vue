@@ -6,14 +6,12 @@
     >
       <img src="../assets/img/vueschool-logo.svg">
     </router-link>
-
     <div class="btn-hamburger">
       <!-- use .btn-humburger-active to open the menu -->
       <div class="top bar"></div>
       <div class="middle bar"></div>
       <div class="bottom bar"></div>
     </div>
-
     <!-- use .navbar-open to open nav -->
     <nav class="navbar">
       <ul>
@@ -36,8 +34,7 @@
         <!--<li class="navbar-item mobile-only">-->
         <!--<a href="#">Logout</a>-->
         <!--</li>-->
-
-        <li class="navbar-user">
+        <li class="navbar-user" v-if="user">
           <router-link :to="{name: 'Profile'}">
             <img class="avatar-small" :src="user.avatar" alt="" />
             <span>
@@ -45,7 +42,6 @@
                 <img class="icon-profile" src="../assets/img/arrow-profile.svg" alt="" />
             </span>
           </router-link>
-
           <!-- dropdown menu -->
           <!-- add class "active-drop" to show the dropdown -->
           <div id="user-dropdown">
@@ -60,7 +56,6 @@
     </nav>
   </header>
 </template>
-
 <script>
 import { mapGetters } from "vuex";
 

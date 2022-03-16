@@ -3,9 +3,9 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import AppDate from "@/components/AppDate";
-import {initializeApp} from "firebase/app";
-import {getDatabase} from "firebase/database";
-import {getAuth} from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_API_KEY,
@@ -29,4 +29,7 @@ new Vue({
   router,
   store,
   render: h => h(App),
+  beforeCreate() {
+    store.dispatch("fetchUser", { id: store.state.authId });
+  },
 }).$mount("#app");
