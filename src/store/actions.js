@@ -1,17 +1,29 @@
 import { firebaseDatabase } from "@/main.js";
-import { ref as firebaseRef, onValue as firebaseOnValue } from "firebase/database";
+import {
+  ref as firebaseRef,
+  onValue as firebaseOnValue,
+  update as firebaseUpdate,
+  push as firebasePush,
+} from "firebase/database";
 
 export default {
   createPost({ commit, state }, post) {
-    const postId = "greatPost" + Math.random();
-    post[".key"] = postId;
+    const postId = firebasePush(firebaseRef(firebaseDatabase, "posts")).key;
+
     post.userId = state.authId;
     post.publishedAt = Math.floor(Date.now() / 1000);
 
-    commit("setPost", { post, postId });
-    commit("appendPostToThread", { parentId: post.threadId, childId: postId });
-    commit("appendPostToUser", { parentId: post.userId, childId: postId });
-    return Promise.resolve(state.posts[postId]);
+    const updates = {};
+    updates[`posts/${postId}`] = post;
+    updates[`threads/${post.threadId}/posts/${postId}`] = postId;
+    updates[`users/${post.userId}/posts/${postId}`] = postId;
+
+    firebaseUpdate(firebaseRef(firebaseDatabase), updates).then(() => {
+      commit("setPost", { post, postId });
+      commit("appendPostToThread", { parentId: post.threadId, childId: postId });
+      commit("appendPostToUser", { parentId: post.userId, childId: postId });
+      return Promise.resolve(state.posts[postId]);
+    });
   },
 
   createThread({ state, commit, dispatch }, { text, title, forumId }) {
