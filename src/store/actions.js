@@ -28,20 +28,34 @@ export default {
 
   createThread({ state, commit, dispatch }, { text, title, forumId }) {
     return new Promise((resolve, reject) => {
-      const threadId = "greatThread" + Math.random();
+      const threadId = firebasePush(firebaseRef(firebaseDatabase, "threads")).key;
+      const postId = firebasePush(firebaseRef(firebaseDatabase, "posts")).key;
       const userId = state.authId;
       const publishedAt = Math.floor(Date.now() / 1000);
 
-      const thread = { ".key": threadId, title, forumId, publishedAt, userId };
+      const thread = { title, forumId, publishedAt, userId, firstPostId: postId, posts: {} };
+      thread.posts[postId] = postId;
+      const post = { text, publishedAt, threadId, userId };
 
-      commit("setThread", { threadId, thread });
-      commit("appendThreadToForum", { parentId: forumId, childId: threadId });
-      commit("appendThreadToUser", { parentId: userId, childId: threadId });
+      const updates = {};
+      updates[`threads/${threadId}`] = thread;
+      updates[`forums/${forumId}/threads/${threadId}`] = threadId;
+      updates[`users/${userId}/threads/${threadId}`] = threadId;
+      updates[`posts/${postId}`] = post;
+      updates[`users/${userId}/posts/${postId}`] = postId;
 
-      dispatch("createPost", { text, threadId }).then(post => {
-        commit("setThread", { threadId, thread: { ...thread, firstPostId: post[".key"] } });
+      firebaseUpdate(firebaseRef(firebaseDatabase), updates).then(() => {
+        // update thread
+        commit("setItem", { resource: "threads", id: threadId, item: thread });
+        commit("appendThreadToForum", { parentId: forumId, childId: threadId });
+        commit("appendThreadToUser", { parentId: userId, childId: threadId });
+        // update post
+        commit("setItem", { resource: "posts", item: post, id: postId });
+        commit("appendPostToThread", { parentId: post.threadId, childId: postId });
+        commit("appendPostToUser", { parentId: post.userId, childId: postId });
+
+        resolve(state.threads[threadId]);
       });
-      resolve(state.threads[threadId]);
     });
   },
 
