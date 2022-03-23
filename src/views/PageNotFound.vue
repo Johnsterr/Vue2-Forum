@@ -13,11 +13,13 @@
     </p>
   </div>
 </template>
-
 <script>
-export default {};
+export default {
+  created() {
+    this.$emit("ready");
+  },
+};
 </script>
-
 <style module>
 .headingLarge {
   font-size: 100px;
