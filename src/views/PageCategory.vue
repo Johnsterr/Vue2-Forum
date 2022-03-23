@@ -1,5 +1,5 @@
 <template>
-  <div v-if="category" class="col-full">
+  <div v-if="asyncDataStatus_ready" class="col-full">
     <h1>{{ category.name }}</h1>
     <CategoryListItem :category="category" />
   </div>
@@ -7,6 +7,7 @@
 <script>
 import { mapActions } from "vuex";
 import CategoryListItem from "@/components/CategoryListItem.vue";
+import asyncDataStatus from "@/mixins/asyncDataStatus";
 
 export default {
   components: {
@@ -18,6 +19,7 @@ export default {
       type: String,
     },
   },
+  mixins: [asyncDataStatus],
   computed: {
     category() {
       return this.$store.state.categories[this.id];
@@ -27,8 +29,12 @@ export default {
     ...mapActions(["fetchCategory", "fetchForums"]),
   },
   created() {
-    this.fetchCategory({ id: this.id }).then(category => {
+    this.fetchCategory({ id: this.id })
+    .then(category => {
       this.fetchForums({ ids: category.forums });
+    })
+    .finally(() => {
+      this.asyncDataStatus_fetched();
     });
   },
 };

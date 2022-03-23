@@ -1,5 +1,5 @@
 <template>
-  <div v-if="thread && user" class="col-large push-top">
+  <div v-if="asyncDataStatus_ready" class="col-large push-top">
     <h1>
       {{ thread.title }}
       <router-link :to="{name: 'ThreadEdit', id: this.id}" custom v-slot="{navigate, button}">
@@ -7,7 +7,9 @@
       </router-link>
     </h1>
     <p>
-      By <a href="#" class="link-unstyled">{{ user.name }}</a>, <AppDate :timestamp="thread.publishedAt" />.
+      By <a href="#" class="link-unstyled">{{ user.name }}</a>,
+      <AppDate :timestamp="thread.publishedAt" />
+      .
       <span style="float: right; margin-top: 2px" class="hide-mobile text-faded text-small">
         {{ repliesCount }} replies by {{ contributorsCount }} contributors
       </span>
@@ -21,6 +23,7 @@ import { mapActions } from "vuex";
 import PostList from "@/components/PostList.vue";
 import PostEditor from "@/components/PostEditor.vue";
 import { countObjectProperties } from "@/utils";
+import asyncDataStatus from "@/mixins/asyncDataStatus";
 
 export default {
   components: {
@@ -33,6 +36,7 @@ export default {
       type: String,
     },
   },
+  mixins: [asyncDataStatus],
   computed: {
     thread() {
       return this.$store.state.threads[this.id];
@@ -55,14 +59,19 @@ export default {
     ...mapActions(["fetchThread", "fetchUser", "fetchPosts"]),
   },
   created() {
-    this.fetchThread({ id: this.id }).then(thread => {
+    this.fetchThread({ id: this.id })
+    .then(thread => {
       // fetch user
       this.fetchUser({ id: thread.userId });
-      this.fetchPosts({ ids: Object.keys(thread.posts) }).then(posts => {
+      return this.fetchPosts({ ids: Object.keys(thread.posts) })
+      .then(posts => {
         posts.forEach(post => {
           this.fetchUser({ id: post.userId });
         });
       });
+    })
+    .finally(() => {
+      this.asyncDataStatus_fetched();
     });
   },
 };
