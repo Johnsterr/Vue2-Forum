@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "db:seed": "firebase database:set / src/data.json -y"
+    "db:seed": "firebase database:set / src/data.json"
   },
   "dependencies": {
     "core-js": "^3.6.5",
