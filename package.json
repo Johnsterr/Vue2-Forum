@@ -19,7 +19,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-service": "^5.0.4",
     "css-loader": "^3.6.0",
     "firebase-tools": "^10.4.2",
     "prettier": "2.5.1",
