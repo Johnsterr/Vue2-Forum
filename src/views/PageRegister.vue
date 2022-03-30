@@ -48,7 +48,8 @@ export default {
   },
   methods: {
     register() {
-      console.log(this.form);
+      this.$store.dispatch("createUser", this.form)
+      .then(() => this.$router.push("/"));
     },
   },
   created() {

@@ -4,6 +4,7 @@ import {
   onValue as firebaseOnValue,
   update as firebaseUpdate,
   push as firebasePush,
+  set as firebaseSet,
 } from "firebase/database";
 
 export default {
@@ -57,6 +58,24 @@ export default {
         commit("appendPostToUser", { parentId: post.userId, childId: postId });
 
         resolve(state.threads[threadId]);
+      });
+    });
+  },
+
+  createUser({ state, commit }, { email, name, username, avatar = null }) {
+    return new Promise((resolve, reject) => {
+      const registeredAt = Math.floor(Date.now() / 1000);
+      const usernameLower = username.toLowerCase();
+      email = email.toLowerCase();
+      const user = { avatar, email, name, username, usernameLower, registeredAt };
+      const userId = firebasePush(firebaseRef(firebaseDatabase, "users")).key;
+
+      const updates = {};
+      updates[`users/${userId}`] = user;
+
+      firebaseUpdate(firebaseRef(firebaseDatabase), updates).then(() => {
+        commit("setItem", { resource: "users", id: userId, item: user });
+        resolve(state.users[userId]);
       });
     });
   },
