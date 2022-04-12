@@ -13,7 +13,7 @@ export default new Vuex.Store({
     threads: {},
     posts: {},
     users: {},
-    authId: "rpbB8C6ifrYmNDufMERWfQUoa202",
+    authId: null,
   },
   getters,
   actions,

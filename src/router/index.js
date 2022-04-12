@@ -8,6 +8,7 @@ import Category from "@/views/PageCategory.vue";
 import Forum from "@/views/PageForum.vue";
 import Profile from "@/views/PageProfile.vue";
 import Register from "@/views/PageRegister";
+import SignIn from "@/views/PageSignIn";
 import NotFound from "@/views/PageNotFound.vue";
 
 Vue.use(VueRouter);
@@ -64,6 +65,11 @@ const routes = [
     path: "/register",
     name: "Register",
     component: Register,
+  },
+  {
+    path: "/signin",
+    name: "SignIn",
+    component: SignIn,
   },
   {
     path: "*",

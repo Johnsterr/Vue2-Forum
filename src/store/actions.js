@@ -7,7 +7,7 @@ import {
   set as firebaseSet,
 } from "firebase/database";
 
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 export default {
   createPost({ commit, state }, post) {
@@ -87,6 +87,19 @@ export default {
     .then((userCredential) => {
       const user = userCredential.user;
       return dispatch("createUser", { id: user.uid, email, name, username, password, avatar });
+    });
+  },
+
+  signInWithEmailAndPassword(context, { email, password }) {
+    const auth = getAuth();
+    return signInWithEmailAndPassword(auth, email, password);
+  },
+
+  signOut({ commit }) {
+    const auth = getAuth();
+    return signOut(auth)
+    .then(() => {
+      commit("setAuthId", null);
     });
   },
 
