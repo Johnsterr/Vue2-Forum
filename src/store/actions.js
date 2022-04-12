@@ -7,6 +7,8 @@ import {
   set as firebaseSet,
 } from "firebase/database";
 
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
 export default {
   createPost({ commit, state }, post) {
     const postId = firebasePush(firebaseRef(firebaseDatabase, "posts")).key;
@@ -62,21 +64,29 @@ export default {
     });
   },
 
-  createUser({ state, commit }, { email, name, username, avatar = null }) {
+  createUser({ state, commit }, { id, email, name, username, avatar = null }) {
     return new Promise((resolve, reject) => {
       const registeredAt = Math.floor(Date.now() / 1000);
       const usernameLower = username.toLowerCase();
       email = email.toLowerCase();
       const user = { avatar, email, name, username, usernameLower, registeredAt };
-      const userId = firebasePush(firebaseRef(firebaseDatabase, "users")).key;
 
       const updates = {};
-      updates[`users/${userId}`] = user;
+      updates[`users/${id}`] = user;
 
       firebaseUpdate(firebaseRef(firebaseDatabase), updates).then(() => {
-        commit("setItem", { resource: "users", id: userId, item: user });
-        resolve(state.users[userId]);
+        commit("setItem", { resource: "users", id: id, item: user });
+        resolve(state.users[id]);
       });
+    });
+  },
+
+  registerUserWithEmailAndPassword({ dispatch }, { email, name, username, password, avatar = null }) {
+    const auth = getAuth();
+    return createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      return dispatch("createUser", { id: user.uid, email, name, username, password, avatar });
     });
   },
 
