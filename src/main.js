@@ -12,6 +12,13 @@ export const firebaseApp = initializeApp(firebaseConfig);
 export const firebaseDatabase = getDatabase(firebaseApp);
 export const firebaseAuth = getAuth(firebaseApp);
 
+const auth = getAuth();
+auth.onAuthStateChanged(user => {
+  if (user) {
+    store.dispatch("fetchAuthUser");
+  }
+});
+
 Vue.component("AppDate", AppDate);
 
 Vue.config.productionTip = false;

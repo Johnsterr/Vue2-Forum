@@ -132,6 +132,15 @@ export default {
     commit("setUser", { userId: user[".key"], user });
   },
 
+  fetchAuthUser({ dispatch, commit }) {
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+    return dispatch("fetchUser", { id: userId })
+    .then(() => {
+      commit("setAuthId", userId);
+    });
+  },
+
   fetchCategory({ dispatch }, { id }) {
     return dispatch("fetchItem", { resource: "categories", id, emoji: "🏷" });
   },
