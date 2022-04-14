@@ -7,7 +7,14 @@ import {
   set as firebaseSet,
 } from "firebase/database";
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
 export default {
   createPost({ commit, state }, post) {
@@ -87,12 +94,39 @@ export default {
     .then((userCredential) => {
       const user = userCredential.user;
       return dispatch("createUser", { id: user.uid, email, name, username, password, avatar });
-    });
+    })
+    .then(() => dispatch("fetchAuthUser"));
   },
 
   signInWithEmailAndPassword(context, { email, password }) {
     const auth = getAuth();
     return signInWithEmailAndPassword(auth, email, password);
+  },
+
+  signInWithGoogle({ dispatch }) {
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
+    return signInWithPopup(auth, provider)
+    .then(data => {
+      const user = data.user;
+      firebaseOnValue(
+        firebaseRef(firebaseDatabase, `users/${user.uid}`),
+        snapshot => {
+          console.log("signInWithGoogle", snapshot);
+          if (!snapshot.exists()) {
+            return dispatch("createUser", {
+              id: user.uid,
+              name: user.displayName,
+              email: user.email,
+              username: user.email,
+              avatar: user.photoURL,
+            })
+            .then(() => dispatch("fetchAuthUser"));
+          }
+        },
+        { onlyOnce: true },
+      );
+    });
   },
 
   signOut({ commit }) {
@@ -148,9 +182,22 @@ export default {
   fetchAuthUser({ dispatch, commit }) {
     const auth = getAuth();
     const userId = auth.currentUser.uid;
-    return dispatch("fetchUser", { id: userId })
-    .then(() => {
-      commit("setAuthId", userId);
+    return new Promise((resolve, reject) => {
+      // check if user exists in the database
+      firebaseOnValue(
+        firebaseRef(firebaseDatabase, `users/${userId}`),
+        snapshot => {
+          if (snapshot.exists()) {
+            return dispatch("fetchUser", { id: userId }).then(user => {
+              commit("setAuthId", userId);
+              resolve(user);
+            });
+          } else {
+            resolve(null);
+          }
+        },
+        { onlyOnce: true },
+      );
     });
   },
 
