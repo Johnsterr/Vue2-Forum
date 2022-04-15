@@ -1,4 +1,23 @@
-# vue2-forum
+# The Vue Forum
+
+It is training project, created with VueJS. Source code contains Best Practices, Modern Javascript, and other exciting technologies, by building a Real World application - a forum. Application used Firebase Realtime Database & Cloud functions
+
+## We cover the fundamentals:
+
+- Vue-cli, router and state management with Vuex
+- Modern Javascript
+- User permissions & protected routes
+- Third party authentication
+- Deployment
+- Application architecture and best practices
+
+## Also, we dive into harder themes:
+
+- Higher Order Functions
+- Creating Vue Plugins
+- Code Splitting
+- Support for older Browsers
+
 
 ## Project setup
 ```
