@@ -55,13 +55,7 @@ const routes = [
     name: "Profile",
     component: Profile,
     props: true,
-    beforeEnter(to, from, next) {
-      if (store.state.authId) {
-        next();
-      } else {
-        next({ name: "Home" });
-      }
-    },
+    meta: { requiresAuth: true },
   },
   {
     path: "/me/edit",
@@ -98,6 +92,20 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  console.log(`🚦 navigating to ${to.name} from ${from.name}`);
+  if (to.matched.some(route => route.meta.requiresAuth)) {
+    // protected route
+    if (store.state.authId) {
+      next();
+    } else {
+      next({ name: "Home" });
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;
