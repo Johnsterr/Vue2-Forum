@@ -13,6 +13,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  onAuthStateChanged,
   GoogleAuthProvider,
 } from "firebase/auth";
 
@@ -85,6 +86,27 @@ export default {
         commit("setItem", { resource: "users", id: id, item: user });
         resolve(state.users[id]);
       });
+    });
+  },
+
+  initAuthentication({ dispatch, commit, state }) {
+    return new Promise((resolve, reject) => {
+      // unsubscribe observer if already listening
+      if (state.unsubscribeAuthObserver) {
+        state.unsubscribeAuthObserver();
+      }
+
+      const auth = getAuth();
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        console.log("👣 the user has changed");
+        if (user) {
+          dispatch("fetchAuthUser")
+          .then(dbUser => resolve(dbUser));
+        } else {
+          resolve(null);
+        }
+      });
+      commit("setUnsubscribeAuthObserver", unsubscribe);
     });
   },
 
