@@ -6,7 +6,6 @@ import {
   push as firebasePush,
   set as firebaseSet,
 } from "firebase/database";
-
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -16,6 +15,7 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
 } from "firebase/auth";
+import { removeEmptyProperties } from "@/utils";
 
 export default {
   createPost({ commit, state }, post) {
@@ -198,7 +198,22 @@ export default {
   },
 
   updateUser({ commit }, user) {
-    commit("setUser", { userId: user[".key"], user });
+    const updates = {
+      avatar: user.avatar,
+      username: user.username,
+      name: user.name,
+      bio: user.bio,
+      website: user.website,
+      email: user.email,
+      location: user.location,
+    };
+    return new Promise((resolve, reject) => {
+      firebaseUpdate(firebaseRef(firebaseDatabase, `users/${user[".key"]}`), removeEmptyProperties(updates))
+      .then(() => {
+        commit("setUser", { userId: user[".key"], user });
+        resolve(user);
+      });
+    });
   },
 
   fetchAuthUser({ dispatch, commit }) {
