@@ -4,7 +4,7 @@ import actions from "./actions";
 import mutations from "./mutations";
 import auth from "./modules/auth";
 import categories from "./modules/categories.js";
-import forum from "./modules/forum.js";
+import forums from "./modules/forums.js";
 import posts from "./modules/posts.js";
 import threads from "./modules/threads.js";
 import users from "./modules/users.js";
@@ -18,7 +18,7 @@ export default new Vuex.Store({
   modules: {
     auth,
     categories,
-    forum,
+    forums,
     posts,
     threads,
     users,
