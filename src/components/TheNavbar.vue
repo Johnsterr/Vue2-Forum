@@ -4,7 +4,7 @@
         :to="{name: 'Home'}"
         class="logo"
     >
-      <img src="../assets/img/vueschool-logo.svg">
+      <img src="../assets/img/vueschool-logo.svg" alt="logo">
     </router-link>
     <div class="btn-hamburger">
       <!-- use .btn-humburger-active to open the menu -->
@@ -32,7 +32,7 @@
                 <router-link :to="{name: 'Profile'}">View Profile</router-link>
               </li>
               <li class="dropdown-menu-item">
-                <a @click.prevent="$store.dispatch('signOut')">Sign Out</a>
+                <a @click.prevent="logout">Sign Out</a>
               </li>
             </ul>
           </div>
@@ -60,8 +60,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      "user": "authUser",
+      "user": "auth/authUser",
     }),
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("auth/signOut");
+    },
   },
 };
 </script>
