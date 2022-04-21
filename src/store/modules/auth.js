@@ -116,15 +116,15 @@ export default {
         );
       });
     },
+  },
 
-    mutations: {
-      setAuthId(state, id) {
-        state.authId = id;
-      },
+  mutations: {
+    setAuthId(state, id) {
+      state.authId = id;
+    },
 
-      setUnsubscribeAuthObserver(state, unsubscribe) {
-        state.unsubscribeAuthObserver = unsubscribe;
-      },
+    setUnsubscribeAuthObserver(state, unsubscribe) {
+      state.unsubscribeAuthObserver = unsubscribe;
     },
   },
 };

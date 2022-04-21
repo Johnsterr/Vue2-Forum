@@ -9,7 +9,7 @@ export default {
         firebaseRef(firebaseDatabase, `${resource}/${id}`),
         snapshot => {
           commit("setItem", { resource, id: snapshot.key, item: snapshot.val() });
-          resolve(state[resource][id]);
+          resolve(state[resource].items[id]);
         },
         { onlyOnce: true },
       );

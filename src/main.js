@@ -15,7 +15,7 @@ export const firebaseAuth = getAuth(firebaseApp);
 const auth = getAuth();
 auth.onAuthStateChanged(user => {
   if (user) {
-    store.dispatch("fetchAuthUser");
+    store.dispatch("auth/fetchAuthUser");
   }
 });
 
