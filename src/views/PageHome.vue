@@ -20,8 +20,8 @@ export default {
     },
   },
   methods: {
-    ...mapActions('categories', ['fetchAllCategories']),
-    ...mapActions('forums', ['fetchForums'])
+    ...mapActions("categories", ["fetchAllCategories"]),
+    ...mapActions("forums", ["fetchForums"]),
   },
   created() {
     this.fetchAllCategories()
