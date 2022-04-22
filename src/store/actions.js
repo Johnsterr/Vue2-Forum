@@ -17,6 +17,7 @@ export default {
   },
 
   fetchItems({ dispatch }, { ids, resource, emoji }) {
+    console.log(ids);
     ids = Array.isArray(ids) ? ids : Object.keys(ids);
     return Promise.all(ids.map(id => dispatch("fetchItem", { id, resource, emoji })));
   },

@@ -51,7 +51,7 @@ export default {
 
     updateThread({ state, commit, dispatch, rootState }, { title, text, id }) {
       return new Promise((resolve, reject) => {
-        const thread = state.threads[id];
+        const thread = state.items[id];
         const post = rootState.posts.items[thread.firstPostId];
         const edited = {
           at: Math.floor(Date.now() / 1000),
@@ -81,7 +81,7 @@ export default {
   },
   mutations: {
     setThread(state, { thread, threadId }) {
-      Vue.set(state.threads, threadId, thread);
+      Vue.set(state.items, threadId, thread);
     },
 
     appendPostToThread: makeAppendChildToParentMutation({ parent: "threads", child: "posts" }),

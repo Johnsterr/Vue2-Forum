@@ -33,7 +33,7 @@ export default {
 
     updatePost({ state, commit, rootState }, { id, text }) {
       return new Promise((resolve, reject) => {
-        const post = state.posts[id];
+        const post = state.items[id];
         const edited = {
           at: Math.floor(Date.now() / 1000),
           by: rootState.auth.authId,
@@ -58,7 +58,7 @@ export default {
 
   mutations: {
     setPost(state, { post, postId }) {
-      Vue.set(state.posts, postId, post);
+      Vue.set(state.items, postId, post);
     },
   },
 };

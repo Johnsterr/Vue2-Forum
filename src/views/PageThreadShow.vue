@@ -55,8 +55,8 @@ export default {
       return countObjectProperties(this.thread.contributors);
     },
     posts() {
-      const postIds = Object.values(this.thread.posts.items);
-      return Object.values(this.$store.state.posts).filter(post => postIds.includes(post[".key"]));
+      const postIds = Object.values(this.thread.posts);
+      return Object.values(this.$store.state.posts.items).filter(post => postIds.includes(post[".key"]));
     },
   },
   methods: {
