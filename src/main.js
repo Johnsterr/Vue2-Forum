@@ -1,8 +1,9 @@
 import Vue from "vue";
+import vuelidate from "vuelidate";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import AppDate from "@/components/AppDate";
+import AppDate from "./components/AppDate";
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { getAuth } from "firebase/auth";
@@ -19,6 +20,7 @@ auth.onAuthStateChanged(user => {
   }
 });
 
+Vue.use(vuelidate);
 Vue.component("AppDate", AppDate);
 
 Vue.config.productionTip = false;
