@@ -20,16 +20,13 @@
         <i class="fa fa-globe"></i> <a :href="user.website">{{ user.website }}</a>
       </p>
     </div>
-
     <p class="text-xsmall text-faded text-center">Member since june 2003, last visited 4 hours ago</p>
-
     <div class="text-center">
       <hr />
       <router-link :to="{name: 'ProfileEdit'}" class="btn-green btn-small">Edit Profile</router-link>
     </div>
   </div>
 </template>
-
 <script>
 export default {
   props: {
@@ -40,10 +37,10 @@ export default {
   },
   computed: {
     userThreadsCount() {
-      return this.$store.getters.userThreadsCount(this.user[".key"]);
+      return this.$store.getters["users/userThreadsCount"](this.user[".key"]);
     },
     userPostsCount() {
-      return this.$store.getters.userPostsCount(this.user[".key"]);
+      return this.$store.getters["users/userPostsCount"](this.user[".key"]);
     },
   },
 };

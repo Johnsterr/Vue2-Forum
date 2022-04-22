@@ -21,11 +21,11 @@
   </div>
 </template>
 <script>
-import PostList from "@/components/PostList.vue";
-import UserProfileCard from "@/components/UserProfileCard.vue";
-import UserProfileCardEditor from "@/components/UserProfileCardEditor.vue";
+import PostList from "../components/PostList.vue";
+import UserProfileCard from "../components/UserProfileCard.vue";
+import UserProfileCardEditor from "../components/UserProfileCardEditor.vue";
 import { mapGetters } from "vuex";
-import asyncDataStatus from "@/mixins/asyncDataStatus";
+import asyncDataStatus from "../mixins/asyncDataStatus";
 
 export default {
   components: {
@@ -42,14 +42,14 @@ export default {
   mixins: [asyncDataStatus],
   computed: {
     ...mapGetters({
-      user: "authUser",
+      user: "auth/authUser",
     }),
     userPosts() {
-      return this.$store.getters.userPosts(this.user[".key"]);
+      return this.$store.getters["users/userPosts"](this.user[".key"]);
     },
   },
   created() {
-    this.$store.dispatch("fetchPosts", { ids: this.user.posts })
+    this.$store.dispatch("posts/fetchPosts", { ids: this.user.posts })
     .then(() => this.asyncDataStatus_fetched());
   },
 };
