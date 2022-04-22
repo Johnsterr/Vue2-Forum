@@ -18,11 +18,11 @@
           <router-link :to="{name: 'Register'}">Create an account?</router-link>
         </div>
       </form>
-      <div class="push-top text-center">
-        <button @click="signInWithGoogle" class="btn-red btn-xsmall">
-          <i class="fa fa-google fa-btn"></i>Sign in with Google
-        </button>
-      </div>
+      <!--      <div class="push-top text-center">-->
+      <!--        <button @click="signInWithGoogle" class="btn-red btn-xsmall">-->
+      <!--          <i class="fa fa-google fa-btn"></i>Sign in with Google-->
+      <!--        </button>-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     signIn() {
-      this.$store.dispatch("signInWithEmailAndPassword", {
+      this.$store.dispatch("auth/signInWithEmailAndPassword", {
         email: this.form.email,
         password: this.form.password,
       })
@@ -46,7 +46,7 @@ export default {
       .catch(error => alert("🤷‍️" + error.message));
     },
     signInWithGoogle() {
-      this.$store.dispatch("signInWithGoogle")
+      this.$store.dispatch("auth/signInWithGoogle")
       .then(() => this.successRedirect())
       .catch(error => alert("🤷‍️" + error.message));
     },

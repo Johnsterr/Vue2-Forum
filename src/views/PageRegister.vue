@@ -27,11 +27,11 @@
           <button type="submit" class="btn-blue btn-block">Register</button>
         </div>
       </form>
-      <div class="text-center push-top">
-        <button @click="registerWithGoogle" class="btn-red btn-xsmall">
-          <i class="fa fa-google fa-btn"></i>Sign up with Google
-        </button>
-      </div>
+<!--      <div class="text-center push-top">-->
+<!--        <button @click="registerWithGoogle" class="btn-red btn-xsmall">-->
+<!--          <i class="fa fa-google fa-btn"></i>Sign up with Google-->
+<!--        </button>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -50,11 +50,11 @@ export default {
   },
   methods: {
     register() {
-      this.$store.dispatch("registerUserWithEmailAndPassword", this.form)
+      this.$store.dispatch("auth/registerUserWithEmailAndPassword", this.form)
       .then(() => this.successRedirect());
     },
     registerWithGoogle() {
-      this.$store.dispatch("signInWithGoogle")
+      this.$store.dispatch("auth/signInWithGoogle")
       .then(() => this.successRedirect());
     },
     successRedirect() {
