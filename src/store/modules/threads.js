@@ -12,7 +12,7 @@ export default {
   },
 
   getters: {
-    threadRepliesCount: state => id => countObjectProperties(state.threads[id].posts) - 1,
+    threadRepliesCount: state => id => countObjectProperties(state.items[id].posts) - 1,
   },
 
   actions: {
