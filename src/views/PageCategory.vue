@@ -6,8 +6,8 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-import CategoryListItem from "@/components/CategoryListItem.vue";
-import asyncDataStatus from "@/mixins/asyncDataStatus";
+import CategoryListItem from "../components/CategoryListItem.vue";
+import asyncDataStatus from "../mixins/asyncDataStatus";
 
 export default {
   components: {
@@ -22,11 +22,12 @@ export default {
   mixins: [asyncDataStatus],
   computed: {
     category() {
-      return this.$store.state.categories[this.id];
+      return this.$store.state.categories.items[this.id];
     },
   },
   methods: {
-    ...mapActions(["fetchCategory", "fetchForums"]),
+    ...mapActions("categories", ["fetchCategory"]),
+    ...mapActions("forums", ["fetchForums"]),
   },
   created() {
     this.fetchCategory({ id: this.id })
