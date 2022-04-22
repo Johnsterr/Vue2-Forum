@@ -8,8 +8,8 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-import ThreadEditor from "@/components/ThreadEditor.vue";
-import asyncDataStatus from "@/mixins/asyncDataStatus";
+import ThreadEditor from "../components/ThreadEditor.vue";
+import asyncDataStatus from "../mixins/asyncDataStatus";
 
 export default {
   components: {
@@ -29,14 +29,15 @@ export default {
   },
   computed: {
     forum() {
-      return this.$store.state.forums[this.forumId];
+      return this.$store.state.forums.items[this.forumId];
     },
     hasUnsavedChanges() {
       return (this.$refs.editor.form.title || this.$refs.editor.form.text) && !this.saved;
     },
   },
   methods: {
-    ...mapActions(["createThread", "fetchForum"]),
+    ...mapActions("threads", ["createThread"]),
+    ...mapActions("forums", ["fetchForum"]),
     save({ title, text }) {
       this.createThread({ forumId: this.forum[".key"], title, text }).then(thread => {
         this.saved = true;

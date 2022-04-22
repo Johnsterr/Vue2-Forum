@@ -21,10 +21,10 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-import PostList from "@/components/PostList.vue";
-import PostEditor from "@/components/PostEditor.vue";
-import { countObjectProperties } from "@/utils";
-import asyncDataStatus from "@/mixins/asyncDataStatus";
+import PostList from "../components/PostList.vue";
+import PostEditor from "../components/PostEditor.vue";
+import { countObjectProperties } from "../utils";
+import asyncDataStatus from "../mixins/asyncDataStatus";
 
 export default {
   components: {
@@ -40,27 +40,29 @@ export default {
   mixins: [asyncDataStatus],
   computed: {
     ...mapGetters({
-      authUser: "authUser",
+      authUser: "auth/authUser",
     }),
     thread() {
-      return this.$store.state.threads[this.id];
+      return this.$store.state.threads.items[this.id];
     },
     repliesCount() {
-      return this.$store.getters.threadRepliesCount(this.thread[".key"]);
+      return this.$store.getters["threads/threadRepliesCount"](this.thread[".key"]);
     },
     user() {
-      return this.$store.state.users[this.thread.userId];
+      return this.$store.state.users.items[this.thread.userId];
     },
     contributorsCount() {
       return countObjectProperties(this.thread.contributors);
     },
     posts() {
-      const postIds = Object.values(this.thread.posts);
+      const postIds = Object.values(this.thread.posts.items);
       return Object.values(this.$store.state.posts).filter(post => postIds.includes(post[".key"]));
     },
   },
   methods: {
-    ...mapActions(["fetchThread", "fetchUser", "fetchPosts"]),
+    ...mapActions("threads", ["fetchThread"]),
+    ...mapActions("users", ["fetchUser"]),
+    ...mapActions("posts", ["fetchPosts"]),
   },
   created() {
     this.fetchThread({ id: this.id })
