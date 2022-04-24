@@ -8,8 +8,8 @@
   </div>
 </template>
 <script>
-import TheNavbar from "@/components/TheNavbar";
-import AppSpinner from "@/components/AppSpinner";
+import TheNavbar from "./components/TheNavbar";
+import AppSpinner from "./components/AppSpinner";
 import NProgress from "nprogress";
 
 export default {

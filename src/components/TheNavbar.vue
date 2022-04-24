@@ -55,7 +55,7 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import clickOutside from "../directives/click-outside";
+import clickOutside from "../directives/click-outside.js";
 import handleScroll from "../directives/handle-scroll.js";
 
 export default {

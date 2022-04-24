@@ -70,7 +70,7 @@
 </template>
 <script>
 import { required, email } from "vuelidate/lib/validators";
-import { uniqueUsername, uniqueEmail } from "../utils/validators";
+import { uniqueUsername, uniqueEmail } from "../utils/validators.js";
 
 export default {
   props: {

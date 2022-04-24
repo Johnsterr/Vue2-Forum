@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import ThreadListItem from "./ThreadListItem";
+import ThreadListItem from "./ThreadListItem.vue";
 
 export default {
   components: {
