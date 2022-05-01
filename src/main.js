@@ -1,9 +1,9 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import vuelidate from "vuelidate";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import AppDate from "./components/AppDate";
+import AppDate from "./components/AppDate.vue";
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { getAuth } from "firebase/auth";
@@ -20,13 +20,13 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-Vue.use(vuelidate);
-Vue.component("AppDate", AppDate);
+const app = createApp(App);
 
-Vue.config.productionTip = false;
+app.use(router);
+app.use(store);
+app.use(vuelidate);
+app.component("AppDate", AppDate);
 
-new Vue({
-  router,
-  store,
-  render: h => h(App),
-}).$mount("#app");
+//Vue.config.productionTip = false;
+
+app.$mount("#app");
