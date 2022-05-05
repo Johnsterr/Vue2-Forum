@@ -1,5 +1,4 @@
 import { countObjectProperties } from "../../utils";
-import Vue from "vue";
 import { makeAppendChildToParentMutation } from "../assetHelper.js";
 import { push as firebasePush, ref as firebaseRef, update as firebaseUpdate } from "firebase/database";
 import { firebaseDatabase } from "../../main.js";
@@ -81,7 +80,7 @@ export default {
   },
   mutations: {
     setThread(state, { thread, threadId }) {
-      Vue.set(state.items, threadId, thread);
+      state.items.threadId = thread;
     },
 
     appendPostToThread: makeAppendChildToParentMutation({ parent: "threads", child: "posts" }),

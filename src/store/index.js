@@ -1,5 +1,4 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { createStore } from "vuex";
 import actions from "./actions";
 import mutations from "./mutations";
 import auth from "./modules/auth";
@@ -9,9 +8,7 @@ import posts from "./modules/posts.js";
 import threads from "./modules/threads.js";
 import users from "./modules/users.js";
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+const store = createStore({
   state: {},
   actions,
   mutations,
@@ -24,3 +21,5 @@ export default new Vuex.Store({
     users,
   },
 });
+
+export default store;

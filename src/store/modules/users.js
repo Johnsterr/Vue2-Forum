@@ -1,5 +1,4 @@
 import { countObjectProperties, removeEmptyProperties } from "../../utils";
-import Vue from "vue";
 import { makeAppendChildToParentMutation } from "../assetHelper.js";
 import { ref as firebaseRef, update as firebaseUpdate } from "firebase/database";
 import { firebaseDatabase } from "../../main.js";
@@ -74,7 +73,7 @@ export default {
 
   mutations: {
     setUser(state, { user, userId }) {
-      Vue.set(state.items, userId, user);
+      state.items.userId = user;
     },
 
     appendPostToUser: makeAppendChildToParentMutation({ parent: "users", child: "posts" }),

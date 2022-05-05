@@ -5,7 +5,7 @@ import {
   orderByChild,
   equalTo,
 } from "firebase/database";
-import { helpers as vuelidateHelpers } from "vuelidate/lib/validators";
+import { helpers as vuelidateHelpers } from "@vuelidate/validators";
 import { firebaseDatabase } from "../main.js";
 
 export const uniqueUsername = (value) => {

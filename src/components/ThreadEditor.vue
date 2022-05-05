@@ -33,7 +33,8 @@
   </form>
 </template>
 <script>
-import { required, minLength } from "vuelidate/lib/validators";
+import useVuelidate from "@vuelidate/core";
+import { required, minLength } from "@vuelidate/validators";
 
 export default {
   props: {
@@ -46,17 +47,22 @@ export default {
       default: "",
     },
   },
-  validations: {
-    form: {
-      title: {
-        required,
-        minLength: minLength(10),
+  setup() {
+    return { v$: useVuelidate() };
+  },
+  validations() {
+    return {
+      form: {
+        title: {
+          required,
+          minLength: minLength(10),
+        },
+        text: {
+          required,
+          minLength: minLength(40),
+        },
       },
-      text: {
-        required,
-        minLength: minLength(40),
-      },
-    },
+    };
   },
   data() {
     return {

@@ -8,8 +8,8 @@
   </div>
 </template>
 <script>
-import TheNavbar from "./components/TheNavbar";
-import AppSpinner from "./components/AppSpinner";
+import TheNavbar from "./components/TheNavbar.vue";
+import AppSpinner from "./components/AppSpinner.vue";
 import NProgress from "nprogress";
 
 export default {
@@ -44,7 +44,7 @@ export default {
 </script>
 <style>
 @import "assets/css/style.css";
-@import "~nprogress/nprogress.css";
+@import "nprogress/nprogress.css";
 
 #nprogress .bar {
   background: #57AD8D;

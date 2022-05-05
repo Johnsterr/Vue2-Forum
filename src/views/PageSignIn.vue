@@ -7,24 +7,24 @@
           <label for="email">Email</label>
           <input
               v-model="form.email"
-              @blur="$v.form.email.$touch()"
+              @blur="v$.form.email.$touch()"
               id="email" type="text" class="form-input"
           >
-          <template v-if="$v.form.email.$error">
-            <span v-if="!$v.form.email.required" class="form-error">This field is required</span>
-            <span v-else-if="!$v.form.email.email" class="form-error">This in not a valid email address</span>
+          <template v-if="v$.form.email.$error">
+            <span v-if="!v$.form.email.required" class="form-error">This field is required</span>
+            <span v-else-if="!v$.form.email.email" class="form-error">This in not a valid email address</span>
           </template>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
           <input
               v-model="form.password"
-              @blur="$v.form.password.$touch()"
+              @blur="v$.form.password.$touch()"
               id="password" type="password" class="form-input"
           >
-          <template v-if="$v.form.password.$error">
-            <span v-if="!$v.form.password.required" class="form-error">This field is required</span>
-            <span v-if="!$v.form.password.minLength" class="form-error">
+          <template v-if="v$.form.password.$error">
+            <span v-if="!v$.form.password.required" class="form-error">This field is required</span>
+            <span v-if="!v$.form.password.minLength" class="form-error">
               The password must be at least 6 characters long
             </span>
           </template>
@@ -45,20 +45,26 @@
   </div>
 </template>
 <script>
-import { required, email, minLength } from "vuelidate/lib/validators";
+import useVuelidate from "@vuelidate/core";
+import { required, email, minLength } from "@vuelidate/validators";
 
 export default {
-  validations: {
-    form: {
-      email: {
-        required,
-        email,
+  setup() {
+    return { v$: useVuelidate() };
+  },
+  validations() {
+    return {
+      form: {
+        email: {
+          required,
+          email,
+        },
+        password: {
+          required,
+          minLength: minLength(6),
+        },
       },
-      password: {
-        required,
-        minLength: minLength(6),
-      },
-    },
+    }
   },
   data() {
     return {
@@ -70,8 +76,8 @@ export default {
   },
   methods: {
     signIn() {
-      this.$v.form.$touch();
-      if (!this.$v.form.$invalid) {
+      this.v$.form.$touch();
+      if (!this.v$.form.$invalid) {
         this.$store.dispatch("auth/signInWithEmailAndPassword", {
           email: this.form.email,
           password: this.form.password,

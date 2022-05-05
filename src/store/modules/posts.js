@@ -1,4 +1,3 @@
-import Vue from "vue";
 import { push as firebasePush, ref as firebaseRef, update as firebaseUpdate } from "firebase/database";
 import { firebaseDatabase } from "../../main.js";
 
@@ -58,7 +57,7 @@ export default {
 
   mutations: {
     setPost(state, { post, postId }) {
-      Vue.set(state.items, postId, post);
+      state.items.postId = post;
     },
   },
 };

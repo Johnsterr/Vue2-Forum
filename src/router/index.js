@@ -1,5 +1,4 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import store from "../store";
 import Home from "../views/PageHome.vue";
 import ThreadShow from "../views/PageThreadShow.vue";
@@ -8,11 +7,9 @@ import ThreadEdit from "../views/PageThreadEdit.vue";
 import Category from "../views/PageCategory.vue";
 import Forum from "../views/PageForum.vue";
 import Profile from "../views/PageProfile.vue";
-import Register from "../views/PageRegister";
-import SignIn from "../views/PageSignIn";
+import Register from "../views/PageRegister.vue";
+import SignIn from "../views/PageSignIn.vue";
 import NotFound from "../views/PageNotFound.vue";
-
-Vue.use(VueRouter);
 
 const routes = [
   {
@@ -88,15 +85,19 @@ const routes = [
     },
   },
   {
-    path: "*",
+    path: "/404",
     name: "NotFound",
     component: NotFound,
   },
+  {
+    path: "/:catchAll(.*)", // Unrecognized path automatically matches 404
+    redirect: '/404',
+  },
 ];
 
-const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
+const router = new createRouter({
+  history: createWebHistory(),
+  base: import.meta.env.BASE_URL,
   routes,
 });
 

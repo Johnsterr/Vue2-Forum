@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { countObjectProperties } from "../utils";
+import { countObjectProperties } from "../utils/index.js";
 
 export default {
   props: {
